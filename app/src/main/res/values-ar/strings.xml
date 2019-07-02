@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyGym</string>
+    <string name="done">انتهى</string>
+    <string name="add_exercise">إضافة تمرين</string>
+    <string name="undone">لم انتهي</string>
+    <string name="exercise_already_existed">التمرين موجود مسبقًا</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5976177697973460~3342740919</string>
+    <string name="edit_exercise">تعديل التمرين</string>
+    <string name="delete_exercise">حذف التمرين</string>
+    <string name="discard_changes">هل انت متأكد من تجاهل البيانات</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="internet_connectivity">الرجاء التآكد من الاتصال بالانترنت</string>
+    <string name="to">ل</string>
+    <string name="the_number_shall_be_from">يجب ان يبدأ من</string>
+    <string name="please_select_exercise">الرجاء اختيار تمرين</string>
+</resources>

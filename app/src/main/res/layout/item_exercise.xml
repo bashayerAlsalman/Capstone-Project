@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:contentDescription="@string/root_view"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/exercise_name"
+            style="@style/header_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/exercise_done_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_check_circle_green_24dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/exercise_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/exercise_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/exercise_number"
+            style="@style/box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/exercise_image"
+            app:layout_constraintTop_toTopOf="@id/exercise_image" />
+
+        <TextView
+            android:id="@+id/first_factor_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintEnd_toStartOf="@id/first_factor"
+            app:layout_constraintTop_toTopOf="@id/first_factor" />
+
+        <TextView
+            android:id="@+id/first_factor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/exercise_image"
+            app:layout_constraintTop_toTopOf="@id/exercise_image" />
+
+        <TextView
+            android:id="@+id/second_factor_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintEnd_toStartOf="@id/second_factor"
+            app:layout_constraintTop_toTopOf="@id/second_factor" />
+
+        <TextView
+            android:id="@+id/second_factor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@id/third_factor"
+            app:layout_constraintEnd_toStartOf="@id/exercise_image"
+            app:layout_constraintTop_toBottomOf="@id/first_factor" />
+
+        <TextView
+            android:id="@+id/third_factor_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintEnd_toStartOf="@id/third_factor"
+            app:layout_constraintTop_toTopOf="@id/third_factor" />
+
+        <TextView
+            android:id="@+id/third_factor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/exercise_image"
+            app:layout_constraintEnd_toStartOf="@id/exercise_image"
+            app:layout_constraintTop_toBottomOf="@id/second_factor" />
+
+        <Button
+            android:id="@+id/done_button"
+            style="@style/smallButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/done"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exercise_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+

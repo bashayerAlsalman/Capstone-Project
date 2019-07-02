@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "936391348218",
+    "firebase_url": "https://mygym-543bc.firebaseio.com",
+    "project_id": "mygym-543bc",
+    "storage_bucket": "mygym-543bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936391348218:android:38db59bd82846d63",
+        "android_client_info": {
+          "package_name": "net.bashayer.mygym"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936391348218-lg3pmdok8f6gs1hlbso1h2rfgblrcved.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.bashayer.mygym",
+            "certificate_hash": "9e1bd0e0023a4e560ba1fff568456e0b4e53f721"
+          }
+        },
+        {
+          "client_id": "936391348218-0fedthucndlir6dks7j2t0gnbgti91j9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtwPYw7oKcIS7D4WEWrU03dl_Z5HZrZPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936391348218-0fedthucndlir6dks7j2t0gnbgti91j9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MyGym</string>
+    <string name="done">done</string>
+    <string name="root_view">root view</string>
+    <string name="add_exercise">ADD EXERCISE</string>
+    <string name="undone">UNDONE</string>
+    <string name="exercise_already_existed">exercise already existed</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5976177697973460~3342740919</string>
+    <string name="edit_exercise">Edit Exercise</string>
+    <string name="delete_exercise">Delete exercise</string>
+    <string name="discard_changes">are you sure want to discard. The changes?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="internet_connectivity">please check your internet connectivity</string>
+    <string name="to">to</string>
+    <string name="the_number_shall_be_from">value shall be from</string>
+    <string name="please_select_exercise">Please select an exercise</string>
+</resources>

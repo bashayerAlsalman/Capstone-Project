@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SecondAppTheme" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimarySecond</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkSecond</item>
+        <item name="colorAccent">@color/colorAccentSecond</item>
+    </style>
+
+    <style name="smallButton" parent="Widget.MaterialComponents.Button.TextButton">
+
+    </style>
+
+    <style name="button" parent="Widget.MaterialComponents.Button">
+        <item name="android:color">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="redButton">
+        <item name="android:background">@color/colorRed</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:layout_marginStart">18dp</item>
+        <item name="android:layout_marginEnd">18dp</item>
+        <item name="android:layout_marginBottom">18dp</item>
+    </style>
+
+    <style name="header_3" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="boxBasic" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="box" parent="boxBasic"></style>
+
+    <style name="spinner">
+        <item name="android:radius">5dp</item>
+        <item name="android:background">@drawable/rounded_cornors</item>
+    </style>
+
+
+    <style name="editText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_margin">8dp</item>
+    </style>
+</resources>
