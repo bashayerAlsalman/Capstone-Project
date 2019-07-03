@@ -29,16 +29,11 @@ public class ExerciseWidget extends AppWidgetProvider implements LoadExerciseDat
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.exercise_widget);
         views.removeAllViews(R.id.root);
-
-        for (int i = 0; i < 6; i++) {
-            if (exerciseIndex < exercises.size()) {
-                RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.item_box_exercise);
-                child.setTextViewText(R.id.exercise_name, exercises.get(exerciseIndex).getExerciseName());
-                child.setTextViewText(R.id.exercise_number, exercises.get(exerciseIndex).getExerciseId() + "");
-
-                views.addView(R.id.root, child);
-                exerciseIndex++;
-            }
+        for (int i = 0; i < 6 && exerciseIndex < exercises.size(); i++, exerciseIndex++) {
+            RemoteViews child = new RemoteViews(context.getPackageName(), R.layout.item_box_exercise_widget);
+            child.setTextViewText(R.id.exercise_name, exercises.get(exerciseIndex).getExerciseName());
+            child.setTextViewText(R.id.exercise_number, exercises.get(exerciseIndex).getExerciseId() + "");
+            views.addView(R.id.root, child);
         }
         updateIndex();
         // Instruct the widget manager to update the widget
