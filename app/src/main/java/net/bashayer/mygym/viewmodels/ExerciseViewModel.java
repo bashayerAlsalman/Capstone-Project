@@ -1,22 +1,41 @@
-package net.bashayer.mygym.network.data;
+package net.bashayer.mygym.viewmodels;
 
-import android.content.Context;
+import android.app.Application;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import net.bashayer.mygym.network.data.LoadExerciseDataCallback;
+import net.bashayer.mygym.network.data.MyGymRoomDatabase;
 import net.bashayer.mygym.network.model.Exercise;
+import net.bashayer.mygym.network.model.ExerciseCategory;
 
 import java.util.List;
 
-public class ExerciseWorker {
+public class ExerciseViewModel extends AndroidViewModel {
 
     private MyGymRoomDatabase database;
+
+    private LiveData<List<Exercise>> exercises;
+    private LiveData<List<ExerciseCategory>> exerciseCategories;
     private LoadExerciseDataCallback callback;
 
-    public ExerciseWorker(Context context, LoadExerciseDataCallback callback) {
-        this.database = MyGymRoomDatabase.getDatabase(context);
+    public ExerciseViewModel(@NonNull Application application) {
+        super(application);
+        this.database = MyGymRoomDatabase.getDatabase(application);
+        this.exercises = new MutableLiveData<>();
+        this.exerciseCategories = new MutableLiveData<>();
+    }
+
+    public void setCallback(LoadExerciseDataCallback callback) {
         this.callback = callback;
     }
+
 
     public void getAllExercisesByCategory(int categoryId) {
         new GetExerciseByCategoryAsyncTask().execute(categoryId);
@@ -40,11 +59,16 @@ public class ExerciseWorker {
     }
 
     public void getAllExercises() {
-        new GetAllExerciseAsyncTask().execute();
+        new GetAllxerciseAsyncTask().execute();
     }
 
-    public void getAllExercisesForWidget() {
-        new GetAllExerciseAsyncTask().execute();
+
+    private void setExercises(LiveData<List<Exercise>> exercises) {
+        this.exercises = exercises;
+    }
+
+    private void setExercisesCategories(LiveData<List<ExerciseCategory>> exercisesCategories) {
+        this.exerciseCategories = exerciseCategories;
     }
 
     private class UpdateExerciseAsyncTask extends AsyncTask<Exercise, Void, Void> {
@@ -103,44 +127,32 @@ public class ExerciseWorker {
         }
     }
 
-    private class GetExerciseByCategoryAsyncTask extends AsyncTask<Integer, Void, List<Exercise>> {
+    private class GetExerciseByCategoryAsyncTask extends AsyncTask<Integer, Void, LiveData<List<Exercise>>> {
         @Override
-        protected List<Exercise> doInBackground(Integer... ids) {
-            return database.exerciseDao().getExerciseByCategory(ids[0]).getValue();
+        protected LiveData<List<Exercise>> doInBackground(Integer... ids) {
+            return database.exerciseDao().getExerciseByCategory(ids[0]);
         }
 
         @Override
-        protected void onPostExecute(List<Exercise> exercises) {
+        protected void onPostExecute(LiveData<List<Exercise>> exercises) {
             super.onPostExecute(exercises);
+            setExercises(exercises);
             callback.onExerciseLoaded(exercises);
         }
     }
 
-    private class GetAllExerciseAsyncTask extends AsyncTask<Void, Void, List<Exercise>> {
+    private class GetAllxerciseAsyncTask extends AsyncTask<Void, Void, LiveData<List<Exercise>>> {
         @Override
-        protected List<Exercise> doInBackground(Void... voids) {
-            return database.exerciseDao().getAllExerciseForWidget();
+        protected LiveData<List<Exercise>> doInBackground(Void... voids) {
+            return database.exerciseDao().getAllExercise();
         }
 
         @Override
-        protected void onPostExecute(List<Exercise> exercises) {
+        protected void onPostExecute(LiveData<List<Exercise>> exercises) {
             super.onPostExecute(exercises);
+            setExercises(exercises);
             callback.onExerciseLoaded(exercises);
         }
     }
-
-    private class GetAllExerciseForWidgetAsyncTask extends AsyncTask<Void, Void, List<Exercise>> {
-        @Override
-        protected List<Exercise> doInBackground(Void... voids) {
-            return database.exerciseDao().getAllExerciseForWidget();
-        }
-
-        @Override
-        protected void onPostExecute(List<Exercise> exercises) {
-            super.onPostExecute(exercises);
-            callback.onExerciseLoaded(exercises);
-        }
-    }
-
 
 }

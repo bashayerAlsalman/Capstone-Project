@@ -15,4 +15,18 @@
     <string name="to">ل</string>
     <string name="the_number_shall_be_from">يجب ان يبدأ من</string>
     <string name="please_select_exercise">الرجاء اختيار تمرين</string>
+    <string name="ads">اعلانات</string>
+    <string name="exercises">تمرينات</string>
+    <string name="first_factor">العامل الاول</string>
+    <string name="second_factor">العامل الثاني</string>
+    <string name="third_factor">العامل الثالث</string>
+    <string name="save_button">رز الحفط</string>
+    <string name="delete_button">رز الحذف</string>
+    <string name="exercises_categories">تصنيف التمارين</string>
+    <string name="exercise_name">اسم التمرين</string>
+    <string name="exercise_image">صورة التمرين</string>
+    <string name="exercise_number">رقم التمرين</string>
+    <string name="exercise_done_icon">صورة الانتهاء من التمرين</string>
+    <string name="done_button">زر الانهاء</string>
+    <string name="category_description">وصف التمرين</string>
 </resources>

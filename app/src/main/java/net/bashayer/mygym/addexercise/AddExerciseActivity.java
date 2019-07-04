@@ -11,8 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,10 +28,10 @@ import net.bashayer.mygym.MyGymApplication;
 import net.bashayer.mygym.R;
 import net.bashayer.mygym.exercise.ExerciseCallback;
 import net.bashayer.mygym.network.ExerciseService;
-import net.bashayer.mygym.network.data.ExerciseWorker;
 import net.bashayer.mygym.network.data.LoadExerciseDataCallback;
 import net.bashayer.mygym.network.model.Exercise;
 import net.bashayer.mygym.network.model.ExerciseCategory;
+import net.bashayer.mygym.viewmodels.ExerciseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,15 +50,11 @@ import static net.bashayer.mygym.common.Constants.EXERCISE_CATEGORY_KEY;
 import static net.bashayer.mygym.common.Constants.EXERCISE_CATEGORY_NAME;
 import static net.bashayer.mygym.common.Constants.EXERCISE_KEY;
 
-public class AddExerciseActivity extends MyGymApplication implements ExerciseCallback, LoadExerciseDataCallback {
+public class AddExerciseActivity extends MyGymApplication implements ExerciseCallback, LoadExerciseDataCallback, LifecycleOwner {
 
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-//    @BindView(R.id.spinner)
-//    AppCompatSpinner spinner;
-
-
     @BindView(R.id.first_factor)
     TextInputEditText firstFactorTextInputEditText;
     @BindView(R.id.second_factor)
@@ -79,11 +78,13 @@ public class AddExerciseActivity extends MyGymApplication implements ExerciseCal
 
     @BindView(R.id.adView)
     AdView mAdView;
+    @BindView(R.id.my_toolbar)
+    Toolbar toolbar;
 
     private AddExerciseAdapter adapter;
     private int categoryId;
 
-    private ExerciseWorker exerciseWorker;
+    private ExerciseViewModel viewModel;
 
     private Exercise selectedExercise = null;
     private List<Exercise> allInsertedExercises = new ArrayList<>();
@@ -94,13 +95,16 @@ public class AddExerciseActivity extends MyGymApplication implements ExerciseCal
         setContentView(R.layout.activity_add_exercise);
 
         ButterKnife.bind(this);
-        exerciseWorker = new ExerciseWorker(this, this);
+        viewModel = ViewModelProviders.of(this).get(ExerciseViewModel.class);
+        viewModel.setCallback(this);
+        String categoryName = getIntent().getStringExtra(EXERCISE_CATEGORY_NAME);
+
+        toolbar.setTitle(categoryName);
+        setSupportActionBar(toolbar);
 
         this.categoryId = getIntent().getIntExtra(EXERCISE_CATEGORY_KEY, 1);
-        String categoryName = getIntent().getStringExtra(EXERCISE_CATEGORY_NAME);
-        getSupportActionBar().setTitle(categoryName);
 
-        exerciseWorker.getAllExercisesByCategory(this.categoryId);
+        viewModel.getAllExercisesByCategory(this.categoryId);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +175,7 @@ public class AddExerciseActivity extends MyGymApplication implements ExerciseCal
     }
 
     private void saveExercise() throws SQLiteConstraintException {
-        exerciseWorker.saveExercise(selectedExercise);
+        viewModel.saveExercise(selectedExercise);
     }
 
     private void loadExercisesData() {
@@ -219,9 +223,23 @@ public class AddExerciseActivity extends MyGymApplication implements ExerciseCal
     }
 
     @Override
-    public void onExerciseLoaded(List<Exercise> exercises) {
+    public void onExerciseLoaded(LiveData<List<Exercise>> exercises) {
+        exercises.observe(this, new androidx.lifecycle.Observer<List<Exercise>>() {
+            @Override
+            public void onChanged(List<Exercise> exercises) {
+                setExercises(exercises);
+            }
+        });
+    }
+
+    private void setExercises(List<Exercise> exercises) {
         this.allInsertedExercises = exercises;
         loadExercisesData();
+    }
+
+    @Override
+    public void onExerciseLoaded(List<Exercise> exercises) {
+        //ignore
     }
 
 
@@ -258,25 +276,6 @@ public class AddExerciseActivity extends MyGymApplication implements ExerciseCal
     private void callOnBackPressed() {
         super.onBackPressed();
     }
-
-//    @Override
-//    public void onExerciseCategoriesLoaded(List<ExerciseCategory> exerciseCategories) {
-//        List<String> list = getCategories(exerciseCategories);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, list);
-//        spinner.setAdapter(adapter);
-//        spinner.setOnItemSelectedListener(this);
-//    }
-
-//    private List<String> getCategories(List<ExerciseCategory> exerciseCategories) {
-//        List<String> list = new ArrayList<>();
-//
-//        for (ExerciseCategory exerciseCategory : exerciseCategories) {
-//            list.add(exerciseCategory.getName());
-//        }
-//        return list;
-//    }
-
 
     @Override
     public void onExerciseClick(Exercise exercise) {

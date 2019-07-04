@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -16,9 +19,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.bashayer.mygym.MyGymApplication;
 import net.bashayer.mygym.R;
 import net.bashayer.mygym.common.Constants;
-import net.bashayer.mygym.network.data.ExerciseWorker;
 import net.bashayer.mygym.network.data.LoadExerciseDataCallback;
 import net.bashayer.mygym.network.model.Exercise;
+import net.bashayer.mygym.viewmodels.ExerciseViewModel;
 
 import java.util.List;
 
@@ -28,11 +31,10 @@ import butterknife.ButterKnife;
 import static net.bashayer.mygym.common.Constants.EXERCISE_KEY;
 import static net.bashayer.mygym.common.Constants.REQUEST_CODE_EDITED;
 
-public class EditExerciseActivity extends MyGymApplication implements LoadExerciseDataCallback {
+public class EditExerciseActivity extends MyGymApplication implements LoadExerciseDataCallback, LifecycleOwner {
 
-    private ExerciseWorker worker;
     private Exercise exercise;
-
+    private ExerciseViewModel viewModel;
 
     @BindView(R.id.first_factor)
     TextInputEditText firstFactorTextInputEditText;
@@ -54,6 +56,8 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
     AppCompatButton button;
     @BindView(R.id.delete_button)
     AppCompatButton deleteButton;
+    @BindView(R.id.my_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +66,10 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
 
         ButterKnife.bind(this);
         exercise = getIntent().getParcelableExtra(Constants.EXERCISE_KEY);
-        worker = new ExerciseWorker(this, this);
+        viewModel = ViewModelProviders.of(this).get(ExerciseViewModel.class);
+        viewModel.setCallback(this);
 
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(exercise.getExerciseName());
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +84,7 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                worker.deleteExercise(exercise);
+                viewModel.deleteExercise(exercise);
             }
         });
 
@@ -88,6 +94,7 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
 
     private boolean formIsValid() {
         if (exercise == null) {
+            showMessage(getString(R.string.please_select_exercise));
             return false;
         }
         for (int i = 0; i < exercise.getSpecifications().size(); i++) {
@@ -100,30 +107,17 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
             switch (i) {
                 case 0:
                     value = getIntValue(this.firstFactorTextInputEditText.getText().toString());
-
-                    if (this.firstFactorTextInputEditText.getText().toString() == null ||
-                            this.firstFactorTextInputEditText.getText().toString() == "" || value < min || value > max) {
-                        showMessage(name, min, max);
-                        return false;
-                    }
+                    break;
                 case 1:
-
                     value = getIntValue(this.secondFactorTextInputEditText.getText().toString());
-
-                    if (this.secondFactorTextInputEditText.getText().toString() == null ||
-                            this.secondFactorTextInputEditText.getText().toString() == "" || value < min || value > max) {
-                        showMessage(name, min, max);
-                        return false;
-                    }
+                    break;
                 case 2:
-
                     value = getIntValue(this.thirdFactorTextInputEditText.getText().toString());
-
-                    if (this.thirdFactorTextInputEditText.getText().toString() == null ||
-                            this.thirdFactorTextInputEditText.getText().toString() == "" || value < min || value > max) {
-                        showMessage(name, min, max);
-                        return false;
-                    }
+                    break;
+            }
+            if (value < min || value > max) {
+                showMessage(name, min, max);
+                return false;
             }
             exercise.getSpecifications().get(i).setMine(value);
         }
@@ -141,6 +135,10 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
 
     private void showMessage(String name, int min, int max) {
         Toast.makeText(this, name + " " + getString(R.string.the_number_shall_be_from) + " " + min + " " + getString(R.string.to) + " " + max, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -166,7 +164,7 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
     }
 
     private void saveExercise() {
-        worker.updateExercise(exercise);
+        viewModel.updateExercise(exercise);
     }
 
     private void loadSpecs() {
@@ -204,6 +202,11 @@ public class EditExerciseActivity extends MyGymApplication implements LoadExerci
                     break;
             }
         }
+    }
+
+    @Override
+    public void onExerciseLoaded(LiveData<List<Exercise>> exercises) {
+        //ignore
     }
 
     @Override

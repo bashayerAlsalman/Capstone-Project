@@ -12,21 +12,22 @@
         android:id="@+id/exercise_image"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:background="@color/colorAccent" />
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/exercise_image" />
 
     <TextView
         android:id="@+id/exercise_number"
         style="@style/box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="16" />
+        android:contentDescription="@string/exercise_number" />
 
     <TextView
         android:id="@+id/exercise_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:text="exercise name"
-        android:textColor="@color/colorWhite"/>
+        android:contentDescription="@string/exercise_name"
+        android:textColor="@color/colorWhite" />
 </FrameLayout>
 

@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 
 public interface ExerciseService {
 
-    @GET("v2/5d1936fb30000061568bebfe/")
+    @GET("v2/5d1e362a30000058b6d72565/")
     Observable<List<ExerciseCategory>> getAllExercisesCategory();
 }

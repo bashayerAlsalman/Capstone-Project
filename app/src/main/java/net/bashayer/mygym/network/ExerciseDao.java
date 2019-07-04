@@ -1,5 +1,6 @@
 package net.bashayer.mygym.network;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -23,14 +24,17 @@ public interface ExerciseDao {
     void insertExercise(Exercise exercise);
 
     @Query("SELECT * from exercisecategory")
-    List<ExerciseCategory> getAllExerciseCategories();
+    LiveData<List<ExerciseCategory>> getAllExerciseCategories();
 
     @Insert
     void insetExerciseCategories(List<ExerciseCategory> exerciseCategories);
 
     @Query("SELECT * from Exercise where exerciseCategoryId =:categoryId ")
-    List<Exercise> getExerciseByCategory(int categoryId);
+    LiveData<List<Exercise>> getExerciseByCategory(int categoryId);
 
     @Query("SELECT * from Exercise")
-    List<Exercise> getAllExercise();
+    LiveData<List<Exercise>> getAllExercise();
+
+    @Query("SELECT * from Exercise")
+    List<Exercise> getAllExerciseForWidget();
 }

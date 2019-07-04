@@ -16,7 +16,7 @@ public class ExerciseCategoriesWorker {
         this.database = MyGymRoomDatabase.getDatabase(context);
         this.callback = callback;
     }
-
+/*
     public void saveExerciseCategories(List<ExerciseCategory> exerciseCategories) {
         new SaveExerciseCategoriesAsyncTask().execute(exerciseCategories);
     }
@@ -37,7 +37,7 @@ public class ExerciseCategoriesWorker {
     private class GetExerciseCategoriesAsyncTask extends AsyncTask<Void, Void, List<ExerciseCategory>> {
         @Override
         protected List<ExerciseCategory> doInBackground(Void... voids) {
-            return database.exerciseDao().getAllExerciseCategories();
+            return database.exerciseDao().getAllExerciseCategories().getValue();
         }
 
         @Override
@@ -45,5 +45,5 @@ public class ExerciseCategoriesWorker {
             super.onPostExecute(exerciseCategories);
             callback.onExerciseCategoriesLoaded(exerciseCategories);
         }
-    }
+    }*/
 }

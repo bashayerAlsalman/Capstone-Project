@@ -7,7 +7,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,9 +21,9 @@ import net.bashayer.mygym.MyGymApplication;
 import net.bashayer.mygym.R;
 import net.bashayer.mygym.addexercise.AddExerciseActivity;
 import net.bashayer.mygym.editexercise.EditExerciseActivity;
-import net.bashayer.mygym.network.data.ExerciseWorker;
 import net.bashayer.mygym.network.data.LoadExerciseDataCallback;
 import net.bashayer.mygym.network.model.Exercise;
+import net.bashayer.mygym.viewmodels.ExerciseViewModel;
 
 import java.util.List;
 
@@ -32,7 +36,7 @@ import static net.bashayer.mygym.common.Constants.EXERCISE_KEY;
 import static net.bashayer.mygym.common.Constants.REQUEST_CODE_ADD;
 import static net.bashayer.mygym.common.Constants.REQUEST_CODE_EDITED;
 
-public class ExerciseActivity extends MyGymApplication implements ExerciseCallback, LoadExerciseDataCallback {
+public class ExerciseActivity extends MyGymApplication implements ExerciseCallback, LoadExerciseDataCallback, LifecycleOwner {
 
 
     private int exerciseCategory;
@@ -40,9 +44,11 @@ public class ExerciseActivity extends MyGymApplication implements ExerciseCallba
     RecyclerView recyclerView;
     @BindView(R.id.add_exercise_button)
     FloatingActionButton button;
+    @BindView(R.id.my_toolbar)
+    Toolbar toolbar;
 
-
-    private ExerciseWorker worker;
+    // private ExerciseWorker worker;
+    private ExerciseViewModel viewModel;
     private ExerciseAdapter adapter;
     private String categoryName;
 
@@ -53,10 +59,16 @@ public class ExerciseActivity extends MyGymApplication implements ExerciseCallba
 
         ButterKnife.bind(this);
         exerciseCategory = getIntent().getIntExtra(EXERCISE_CATEGORY_KEY, 1);
-        worker = new ExerciseWorker(this, this);
-        worker.getAllExercisesByCategory(exerciseCategory);
+        viewModel = ViewModelProviders.of(this).get(ExerciseViewModel.class);
+        viewModel.setCallback(this);
+
+        viewModel.getAllExercisesByCategory(exerciseCategory);
+//        worker = new ExerciseWorker(this, this);
+//        worker.getAllExercisesByCategory(exerciseCategory);
 
         categoryName = getIntent().getStringExtra(EXERCISE_CATEGORY_NAME);
+
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(categoryName);
 
         initListener();
@@ -115,12 +127,22 @@ public class ExerciseActivity extends MyGymApplication implements ExerciseCallba
             imageView.setVisibility(View.GONE);
             button.setText(R.string.done);
         }
-        worker.reverseDoneExercise(exercise);
+        // worker.reverseDoneExercise(exercise);
+        viewModel.reverseDoneExercise(exercise);
+    }
+
+    @Override
+    public void onExerciseLoaded(LiveData<List<Exercise>> exercises) {
+        exercises.observe(this, new Observer<List<Exercise>>() {
+            @Override
+            public void onChanged(List<Exercise> exercises) {
+                initExerciseAdapter(exercises);
+            }
+        });
     }
 
     @Override
     public void onExerciseLoaded(List<Exercise> exercises) {
-        initExerciseAdapter(exercises);
     }
 
     @Override

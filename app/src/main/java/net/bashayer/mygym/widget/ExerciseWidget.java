@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import androidx.lifecycle.LiveData;
+
 import net.bashayer.mygym.R;
 import net.bashayer.mygym.network.data.ExerciseWorker;
 import net.bashayer.mygym.network.data.LoadExerciseDataCallback;
@@ -52,8 +54,9 @@ public class ExerciseWidget extends AppWidgetProvider implements LoadExerciseDat
         this.context = context;
         this.appWidgetManager = appWidgetManager;
         this.appWidgetIds = appWidgetIds;
+
         worker = new ExerciseWorker(context, this);
-        worker.getAllExercises();
+        worker.getAllExercisesForWidget();
     }
 
 
@@ -69,11 +72,19 @@ public class ExerciseWidget extends AppWidgetProvider implements LoadExerciseDat
 
 
     @Override
+    public void onExerciseLoaded(LiveData<List<Exercise>> exercises) {
+    }
+
+    @Override
     public void onExerciseLoaded(List<Exercise> exercises) {
         this.exercises = exercises;
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+    }
+
+    private void setExercises(List<Exercise> exercisesList) {
+        exercises = exercisesList;
     }
 
     @Override

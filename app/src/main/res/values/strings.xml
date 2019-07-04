@@ -15,4 +15,18 @@
     <string name="to">to</string>
     <string name="the_number_shall_be_from">value shall be from</string>
     <string name="please_select_exercise">Please select an exercise</string>
+    <string name="ads">ads</string>
+    <string name="exercises">exercises</string>
+    <string name="first_factor">first factor</string>
+    <string name="second_factor">second factor</string>
+    <string name="third_factor">third factor</string>
+    <string name="save_button">button</string>
+    <string name="delete_button">delete button</string>
+    <string name="exercises_categories">exercise categories</string>
+    <string name="exercise_name">exercise name</string>
+    <string name="exercise_image">exercise image</string>
+    <string name="exercise_number">exercise number</string>
+    <string name="exercise_done_icon">exercise done icon</string>
+    <string name="done_button">done image</string>
+    <string name="category_description">category description</string>
 </resources>

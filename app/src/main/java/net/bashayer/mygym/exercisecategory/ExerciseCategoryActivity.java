@@ -3,6 +3,10 @@ package net.bashayer.mygym.exercisecategory;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,9 +14,9 @@ import net.bashayer.mygym.MyGymApplication;
 import net.bashayer.mygym.R;
 import net.bashayer.mygym.exercise.ExerciseActivity;
 import net.bashayer.mygym.network.ExerciseService;
-import net.bashayer.mygym.network.data.ExerciseCategoriesWorker;
 import net.bashayer.mygym.network.data.LoadExerciseCategoriesDataCallback;
 import net.bashayer.mygym.network.model.ExerciseCategory;
+import net.bashayer.mygym.viewmodels.ExerciseCategoryViewModel;
 
 import java.util.List;
 
@@ -29,14 +33,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static net.bashayer.mygym.common.Constants.EXERCISE_CATEGORY_KEY;
 import static net.bashayer.mygym.common.Constants.EXERCISE_CATEGORY_NAME;
 
-public class ExerciseCategoryActivity extends MyGymApplication implements ExerciseCategoryCallback, LoadExerciseCategoriesDataCallback {
+public class ExerciseCategoryActivity extends MyGymApplication implements ExerciseCategoryCallback, LoadExerciseCategoriesDataCallback, LifecycleOwner {
 
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.my_toolbar)
+    Toolbar toolbar;
 
-    private boolean isLocalDate = false;
-    private ExerciseCategoriesWorker worker;
+    private ExerciseCategoryViewModel viewModel;
     private List<ExerciseCategory> exerciseCategories;
 
     @Override
@@ -45,8 +50,13 @@ public class ExerciseCategoryActivity extends MyGymApplication implements Exerci
         setContentView(R.layout.activity_exercise_category);
 
         ButterKnife.bind(this);
-        worker = new ExerciseCategoriesWorker(this, this);
-        worker.getAllExerciseCategories();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.exercises_categories));
+
+        viewModel = ViewModelProviders.of(this).get(ExerciseCategoryViewModel.class);
+        viewModel.setCallback(this::onExerciseCategoriesLoaded);
+        viewModel.getAllExerciseCategories();
     }
 
     private void loadData() {
@@ -71,7 +81,7 @@ public class ExerciseCategoryActivity extends MyGymApplication implements Exerci
                     public void onNext(List<ExerciseCategory> exerciseCategories) {
                         initExerciseCategoryAdapter(exerciseCategories);
                         //save the exercise categories list after uploading it from the api
-                        worker.saveExerciseCategories(exerciseCategories);
+                        viewModel.saveExerciseCategories(exerciseCategories);
                     }
 
                     @Override
@@ -106,7 +116,16 @@ public class ExerciseCategoryActivity extends MyGymApplication implements Exerci
     }
 
     @Override
-    public void onExerciseCategoriesLoaded(List<ExerciseCategory> exerciseCategories) {
+    public void onExerciseCategoriesLoaded(LiveData<List<ExerciseCategory>> exerciseCategoriesList) {
+        exerciseCategoriesList.observe(this, new androidx.lifecycle.Observer<List<ExerciseCategory>>() {
+            @Override
+            public void onChanged(List<ExerciseCategory> exerciseCategories) {
+                setExerciseCategories(exerciseCategories);
+            }
+        });
+    }
+
+    private void setExerciseCategories(List<ExerciseCategory> exerciseCategories) {
         this.exerciseCategories = exerciseCategories;
         if (exerciseCategories == null || exerciseCategories.size() == 0) {
             loadData();
